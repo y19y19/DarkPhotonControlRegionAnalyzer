@@ -10,13 +10,13 @@ class PUWeightProducer {
 public:
 	PUWeightProducer();
 	~PUWeightProducer();
-	TH1F* 	PUWeightHist(std::string era);
-	float 	getWeight(TH1F* ratiohist, float x);
+	TH1* 	PUWeightHist(std::string era);
+	float 	getWeight(TH1* ratiohist, float x);
 
 private:
-	TH1F* 	loadHisto(std::string filename, std::string histname);
-	void 	normHisto(TH1F* hist);
-	TH1F* 	ratio(TH1F* mc, TH1F* data);
+	TH1* 	loadHisto(std::string filename, std::string histname);
+	void 	normHisto(TH1* hist);
+	TH1* 	ratio(TH1* mc, TH1* data);
 
 };
 

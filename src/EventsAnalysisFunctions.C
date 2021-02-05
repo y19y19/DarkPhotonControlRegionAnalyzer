@@ -1,4 +1,3 @@
-
 #include "HEPMathTools.h"
 #include "Events.h"
 #include "TLorentzVector.h"
@@ -10,7 +9,9 @@
 
 
 std::pair<bool,std::array<int,2>> Events::FindMuonPair(Long64_t entry) {
- 
+    //std::cout << "break point EF 1" << std::endl; 
+    fReader.SetEntry(entry);
+    //std::cout << "break point EF s" << std::endl;
     double mp_pt = -1;
     int mp_index = -1;
     double mm_pt = -1;
@@ -50,7 +51,7 @@ std::pair<bool,std::array<int,2>> Events::FindMuonPair(Long64_t entry) {
 
 
 std::pair<bool,int> Events::FindCRJet(Long64_t entry, TLorentzVector m1, TLorentzVector m2) {
-
+    //std::cout << "break point EF 2"<< std::endl;
     fReader.SetEntry(entry);
 
     bool FSRJetExist = false;
@@ -84,12 +85,14 @@ std::pair<bool,int> Events::FindCRJet(Long64_t entry, TLorentzVector m1, TLorent
 
 
 bool Events::JetInFSRRegion(float MuMuMass, float MuMuJetMass) {
+    //std::cout << "break point EF 3"<< std::endl;
     if (MuMuMass < 85.19 && MuMuMass > 0 && MuMuJetMass < 120 && MuMuJetMass > 85) return true;
     else return false;
 }
 
 
 bool Events::JetInCRRegion(float MuMuMass, float MuMuJetMass) {
+    //std::cout << "break point EF 4"<< std::endl;
     if (MuMuMass > 10 && MuMuMass < 80 && MuMuJetMass > 140) return true;
     else return false;
 }

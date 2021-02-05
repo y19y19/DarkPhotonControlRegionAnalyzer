@@ -32,6 +32,39 @@
 #include <cmath>
 
 
+Events::Events(TTree *tree) 
+{
+    Init(tree);
+}
+
+Events::~Events()
+{
+    if (!fChain) return;
+    delete fChain->GetCurrentFile();
+}
+
+void Events::Init(TTree *tree)
+{
+   // The Init() function is called when the selector needs to initialize
+   // a new tree or chain. Typically here the reader is initialized.
+   // It is normally not necessary to make changes to the generated
+   // code, but the routine can be extended by the user if needed.
+   // Init() will be called many times when running on PROOF
+   // (once per file to be processed).
+   fChain = tree;
+   fReader.SetTree(tree);
+}
+
+Bool_t Events::Notify()
+{
+   // The Notify() function is called when a new file is opened. This
+   // can be either for a new TTree in a TChain or when when a new TTree
+   // is started when using PROOF. It is normally not necessary to make changes
+   // to the generated code, but the routine can be extended by the
+   // user if needed. The return value is currently not used.
+
+   return kTRUE;
+}
 
 void Events::Begin(TTree *outputTree) {
    // The Begin() function is called at the start of the query.
@@ -40,6 +73,7 @@ void Events::Begin(TTree *outputTree) {
 
    //TString option = GetOption()
 
+    //std::cout << "break point EM 1"<< std::endl;
     // Set Output tree branches
     outputTree->Branch("cut0",&cut0,"cut0/O");
     outputTree->Branch("cut1",&cut1,"cut1/O");
@@ -118,8 +152,9 @@ Bool_t Events::Process(Long64_t entry)
    //
    // The return value is currently not used.
 
+    //std::cout << "break point EM 2"<< std::endl;
     fReader.SetEntry(entry);
-
+    //std::cout << "break point EM s" << std::endl;
     // Initialize essential booleans
 
     bool EnergyFractionCutPass = false;
@@ -128,13 +163,11 @@ Bool_t Events::Process(Long64_t entry)
     Weight = *genWeight;
     HBHENoiseIsoFilter = *Flag_HBHENoiseIsoFilter;
     HBHENoiseFilter = *Flag_HBHENoiseFilter;
-
+    //std::cout << "break point EM q" << std::endl;
     // Get PUWeight
-    PUWeightProducer pup;
-    TH1F* puWeight2016 = (TH1F*)pup.PUWeightHist("2016");
     int nvtx = *Pileup_nTrueInt;
     puWeight = pup.getWeight(puWeight2016,nvtx);
-
+    //std::cout << "break point EM p" << std::endl;
     // Find a pair of muons with opposite charges
     std::pair<bool,std::array<int,2>> findMuonPairIndex = FindMuonPair(entry); 
 
@@ -216,9 +249,10 @@ Bool_t Events::Process(Long64_t entry)
 
 
 void Events::Loop(TTree *outputTree) {
+    //std::cout << "break point EM 3"<< std::endl;
     if (fChain == 0) return;
     Long64_t nentries = fChain->GetEntriesFast();
-   
+    //std::cout << "Number of events: " << nentries << std::endl;
     // Only the events pass cut0 will be recorded 
     for (Long64_t jentry = 0; jentry < nentries; jentry++) {
         Bool_t cut0 = Process(jentry);

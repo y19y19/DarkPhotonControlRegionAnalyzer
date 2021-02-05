@@ -50,6 +50,11 @@ public :
    TTreeReader     fReader;  //!the tree reader
    TTree          *fChain = 0;   //!pointer to the analyzed TTree or TChain
 
+
+   // PUWeightProducer
+   PUWeightProducer pup;
+   TH1F* puWeight2016 = (TH1F*)pup.PUWeightHist("2016");;
+
    // Output variables
    Bool_t cut0, cut1, cut2, cut3, cut4, cut5, HBHENoiseIsoFilter, HBHENoiseFilter;
    Int_t jet_Id, jet_puId;
@@ -1524,37 +1529,3 @@ public :
 };
 
 #endif
-
-inline Events::Events(TTree *tree) 
-{
-    Init(tree);
-}
-
-inline Events::~Events()
-{
-    if (!fChain) return;
-    delete fChain->GetCurrentFile();
-}
-
-inline void Events::Init(TTree *tree)
-{
-   // The Init() function is called when the selector needs to initialize
-   // a new tree or chain. Typically here the reader is initialized.
-   // It is normally not necessary to make changes to the generated
-   // code, but the routine can be extended by the user if needed.
-   // Init() will be called many times when running on PROOF
-   // (once per file to be processed).
-   fChain = tree;
-   fReader.SetTree(tree);
-}
-
-inline Bool_t Events::Notify()
-{
-   // The Notify() function is called when a new file is opened. This
-   // can be either for a new TTree in a TChain or when when a new TTree
-   // is started when using PROOF. It is normally not necessary to make changes
-   // to the generated code, but the routine can be extended by the
-   // user if needed. The return value is currently not used.
-
-   return kTRUE;
-}

@@ -1,5 +1,6 @@
 #include "Events.h"
 #include <chrono>
+#include <iostream>
 
 int main(int argc, char** argv) 
 {
@@ -7,12 +8,17 @@ int main(int argc, char** argv)
 
     TFile *inputFile = new TFile(argv[1]);
     TTree *inputTree = (TTree*)inputFile->Get("Events");
-    Events e(inputTree);
 
+    //std::cout << "break point main 1" << std::endl;
+    Events e(inputTree);
+    //std::cout << "break point main 2" << std::endl;
     TFile *outputFile = new TFile(argv[2], "RECREATE");
     TTree *outputTree = new TTree("AnalysisTree","a simple Tree with simple variables");
+    //std::cout << "break point main 3" << std::endl;
     e.Begin(outputTree);
+    //std::cout << "break point main 4" << std::endl;
     e.Loop(outputTree);
+    //std::cout << "break point main 5" << std::endl;
     outputTree->Write();
     outputFile->Close();
     
